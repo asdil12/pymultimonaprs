@@ -1,0 +1,13 @@
+{
+	"callsign": "AB3IC-1",
+	"passcode": "13404",
+	"gateway": "ahubswe.net:2023",
+	"append_callsign": false,
+	"beacon": {
+		"lat": 29.75103,
+		"lng": 11.54129,
+		"symbol": "&",
+		"comment": "PyMultimonAPRS",
+		"send_every": 300
+	}
+}
