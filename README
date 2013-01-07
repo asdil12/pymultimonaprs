@@ -1,0 +1,11 @@
+pymultimonaprs
+==============
+
+Soundcard-based HF2APRS-IG Gateway
+
+
+Install multimonNG
+
+Copy config.json.sample to config.json and edit it.
+
+Run ./pymultimonaprs.py
