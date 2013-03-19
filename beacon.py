@@ -6,7 +6,7 @@ def get_beacon_frame(lat, lng, callsign, symbol, comment):
 		lat_abs = abs(lat)
 		lat_deg = int(lat_abs)
 		lat_min = (lat_abs % 1) * 60
-		return "%i%05.2f%c" % (lat_deg, lat_min, lat_dir)
+		return "%02i%05.2f%c" % (lat_deg, lat_min, lat_dir)
 
 	def encode_lng(lng):
 		lng_dir = 'E' if lng > 0 else 'W'
