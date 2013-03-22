@@ -1,13 +1,16 @@
 {
-	"callsign": "AB3IC-1",
-	"passcode": "13404",
-	"gateway": "ahubswe.net:2023",
+	"callsign": "DL0ABC-1",
+	"passcode": "12345",
+	"gateway": "euro.aprs2.net:14580",
 	"append_callsign": false,
 	"beacon": {
 		"lat": 29.75103,
 		"lng": 11.54129,
+		"table": "I",
 		"symbol": "&",
-		"comment": "PyMultimonAPRS",
+		"comment": "PyRtlMultimonAPRS iGate",
 		"send_every": 300
-	}
+	},
+	"rtl_freq": "144800000",
+	"rtl_options": "-p 18 -g 19"
 }

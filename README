@@ -1,11 +1,12 @@
-pymultimonaprs
-==============
+pyrtlmultimonaprs
+=================
 
-Soundcard-based HF2APRS-IG Gateway
+rtl-sdr based HF2APRS-IG Gateway
 
+Original initiated by Dominik Heidler under pymultimonaprs
 
 Install multimonNG
 
 Copy config.json.sample to config.json and edit it.
 
-Run ./pymultimonaprs.py
+Run ./pyrtlmultimonaprs.py

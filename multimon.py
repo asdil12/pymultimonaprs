@@ -3,18 +3,19 @@
 import subprocess
 import re
 
-def multimon(frame_handler):
+def multimon(frame_handler, config):
 	start_frame_re = re.compile(r'^AFSK1200: (.*)$')
 
 	aprs_datatypes = [0x1C, 0x1D, '!', '=', ')', ';', '@', '/', '>', '\'', '`']
 
-	proc = subprocess.Popen(['multimonNG', '-a', 'AFSK1200'], stdout=subprocess.PIPE, stderr=open('/dev/null'))
+	proc1 = subprocess.Popen(['rtl_fm', '-f', config['rtl_freq'] , '-s', '22050', '-p', config['rtl_ppm'], '-g', config['rtl_gain'], '-'], stdout=subprocess.PIPE, stderr=open('/dev/null'))
+	proc2 = subprocess.Popen(['multimonNG', '-a', 'AFSK1200', '-'], stdin=proc1.stdout, stdout=subprocess.PIPE, stderr=open('/dev/null'))
 
 	awaiting_payload = False
 	frame_buffer = ''
 
 	while True:
-		line = proc.stdout.readline()
+		line = proc2.stdout.readline()
 		line = line.strip()
 		m = start_frame_re.match(line)
 		if m:
