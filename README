@@ -5,6 +5,8 @@ rtl-sdr based HF2APRS-IG Gateway
 
 Original initiated by Dominik Heidler under pymultimonaprs
 
+Install rtl-sdr from osmocom
+
 Install multimonNG
 
 Copy config.json.sample to config.json and edit it.
