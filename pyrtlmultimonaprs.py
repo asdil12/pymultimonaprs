@@ -30,6 +30,8 @@ def bc():
 	while True:
 		tnc2_frame = beacon.get_beacon_frame(**bcargs)
 		ig.send(tnc2_frame)
+		tnc2_frame = beacon.get_status_frame(config['callsign'], config['beacon']['status'])
+		ig.send(tnc2_frame)
 		sleep(config['beacon']['send_every'])
 
 

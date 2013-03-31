@@ -18,3 +18,7 @@ def get_beacon_frame(lat, lng, callsign, table, symbol, comment):
 	pos = "%s%s%s" % (encode_lat(lat), table, encode_lng(lng))
 	payload = "=%s%s %s" % (pos, symbol, comment)
 	return "%s>APRS,TCPIP*:%s" % (callsign, payload)
+
+def get_status_frame(callsign, status):
+	payload = ">%s" % (status)
+	return "%s>APRS,TCPIP*:%s" % (callsign, payload)

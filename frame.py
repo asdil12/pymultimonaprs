@@ -19,10 +19,12 @@ class APRSFrame:
 		header = header.strip()
 		payload = payload.strip()
 		try:
-			res = header_re.match(header).groupdict()
-			self.source = res['source']
-			self.dest = res['dest']
-			self.path = res['path'].split(',')
+			res = header_re.match(header)
+			if res != None:
+				res = header_re.match(header).groupdict()
+				self.source = res['source']
+				self.dest = res['dest']
+				self.path = res['path'].split(',')
 		except:
 			raise InvalidFrame()
 		self.payload = payload

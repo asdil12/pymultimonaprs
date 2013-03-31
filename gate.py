@@ -29,7 +29,7 @@ class IGate:
 		print server_hello.strip(" \r\n")
 
 		# Login
-		self.socket.send("user %s pass %s vers PyMultimonAPRS 0.1 filter r/38/-171/1\r\n" % (self.callsign, self.passcode))
+		self.socket.send("user %s pass %s vers PyRtlMultimonAPRS 0.1 filter r/50/10/50\r\n" % (self.callsign, self.passcode))
 
 		server_return = self.socket.recv(1024)
 		print server_return.strip(" \r\n")
