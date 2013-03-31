@@ -3,14 +3,16 @@
 	"passcode": "12345",
 	"gateway": "euro.aprs2.net:14580",
 	"append_callsign": false,
+	"rtl_freq": "144800000",
+	"rtl_ppm": "18",
+	"rtl_gain": "42",
 	"beacon": {
-		"lat": 29.75103,
-		"lng": 11.54129,
+		"lat": 51.00000,
+		"lng": 10.00000,
 		"table": "I",
 		"symbol": "&",
 		"comment": "PyRtlMultimonAPRS iGate",
+		"status": "running on Raspberry Pi with rtl dongle",
 		"send_every": 300
-	},
-	"rtl_freq": "144800000",
-	"rtl_options": "-p 18 -g 19"
+	}
 }
