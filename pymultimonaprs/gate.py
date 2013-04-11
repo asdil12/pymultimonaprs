@@ -3,6 +3,7 @@
 import threading
 import socket
 import Queue
+import pkg_resources
 
 class IGate:
 	def __init__(self, callsign, passcode, gateway):
@@ -28,8 +29,14 @@ class IGate:
 		server_hello = self.socket.recv(1024)
 		print server_hello.strip(" \r\n")
 
+		# Try to get my version
+		try:
+			version = pkg_resources.get_distribution("pymultimonaprs").version
+		except:
+			version = 'GIT'
+
 		# Login
-		self.socket.send("user %s pass %s vers PyMultimonAPRS 0.1 filter r/38/-171/1\r\n" % (self.callsign, self.passcode))
+		self.socket.send("user %s pass %s vers PyMultimonAPRS %s filter r/38/-171/1\r\n" % (self.callsign, self.passcode, version))
 
 		server_return = self.socket.recv(1024)
 		print server_return.strip(" \r\n")
