@@ -7,16 +7,19 @@ from time import sleep
 import multimon
 import beacon
 import gate
-from frame import APRSFrame
+from frame import APRSFrame, InvalidFrame
 
 config = json.load(open('config.json'))
 
 
 def mmcb(ui_frame):
-	frame = APRSFrame()
-	frame.import_ui(ui_frame)
-	tnc2_frame = frame.export_tnc2()
-	ig.send(tnc2_frame)
+	try:
+		frame = APRSFrame()
+		frame.import_ui(ui_frame)
+		tnc2_frame = frame.export_tnc2()
+		ig.send(tnc2_frame)
+	except InvalidFrame:
+		pass
 
 def bc():
 	bcargs = {
