@@ -4,12 +4,12 @@ import json
 import threading
 from time import sleep
 
-import multimon
-import beacon
-import gate
-from frame import APRSFrame, InvalidFrame
+from pymultimonaprs import multimon
+from pymultimonaprs import beacon
+from pymultimonaprs import gate
+from pymultimonaprs.frame import APRSFrame, InvalidFrame
 
-config = json.load(open('config.json'))
+config = json.load(open('/etc/pymultimonaprs.json'))
 
 
 def mmcb(ui_frame):

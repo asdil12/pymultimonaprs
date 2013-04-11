@@ -13,6 +13,7 @@ Installation
 
 - Install multimonNG
 - Install rtl-sdr (for RTL-SDR backend)
-- Copy config.json.sample to config.json and edit it:
+- Run `python2 setup.py install`
+- Edit `/etc/pymultimonaprs.json`:
 	- Set the source to `rtl`, `alsa`, or `pulse` to select the backend
-- Run ./pymultimonaprs.py
+- Run `systemctl start pymultimonaprs` or just `pymultimonaprs` for testing
