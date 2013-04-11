@@ -26,11 +26,14 @@ def bc():
 		'lat': config['beacon']['lat'],
 		'lng': config['beacon']['lng'],
 		'callsign': config['callsign'],
+		'table': config['beacon']['table'],
 		'symbol': config['beacon']['symbol'],
 		'comment': config['beacon']['comment'],
 	}
 	while True:
 		tnc2_frame = beacon.get_beacon_frame(**bcargs)
+		ig.send(tnc2_frame)
+		tnc2_frame = beacon.get_status_frame(config['callsign'], config['beacon']['status'])
 		ig.send(tnc2_frame)
 		sleep(config['beacon']['send_every'])
 

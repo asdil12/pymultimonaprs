@@ -4,10 +4,12 @@
 	"gateway": "ahubswe.net:2023",
 	"append_callsign": false,
 	"beacon": {
-		"lat": 29.75103,
-		"lng": 11.54129,
+		"lat": 51.00000,
+		"lng": 10.00000,
+		"table": "/",
 		"symbol": "&",
-		"comment": "PyMultimonAPRS",
+		"comment": "PyMultimonAPRS iGate",
+		"status": "Running on Raspberry Pi with RTL dongle",
 		"send_every": 300
 	}
 }
