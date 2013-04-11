@@ -40,13 +40,9 @@ def bc():
 
 ig = gate.IGate(config['callsign'], config['passcode'], config['gateway'])
 
-mmt = threading.Thread(target=multimon.multimon, args=(mmcb,))
+mmt = threading.Thread(target=multimon.multimon, args=(mmcb,config))
 mmt.setDaemon(True)
 mmt.start()
-
-#bct = threading.Thread(target=bc)
-#bct.setDaemon(True)
-#bct.start()
 
 bc()
 

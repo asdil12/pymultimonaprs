@@ -1,8 +1,17 @@
 {
-	"callsign": "AB3IC-1",
-	"passcode": "13404",
-	"gateway": "ahubswe.net:2023",
+	"callsign": "DL0ABC-1",
+	"passcode": "12345",
+	"gateway": "euro.aprs2.net:14580",
 	"append_callsign": false,
+	"source": "rtl",
+	"rtl": {
+		"freq": 144.800,
+		"ppm": 18,
+		"gain": 42
+	},
+	"alsa": {
+		"device": "default"
+	},
 	"beacon": {
 		"lat": 51.00000,
 		"lng": 10.00000,
