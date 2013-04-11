@@ -3,7 +3,7 @@ Description=PyMultimonAPRS
 After=network.target
 
 [Service]
-ExecStart=pymultimonaprs
+ExecStart=/usr/bin/pymultimonaprs
 
 [Install]
 WantedBy=multi-user.target
