@@ -2,7 +2,7 @@
 	"callsign": "DL0ABC-1",
 	"passcode": "12345",
 	"gateway": "euro.aprs2.net:14580",
-	"append_callsign": false,
+	"append_callsign": true,
 	"source": "rtl",
 	"rtl": {
 		"freq": 144.800,
