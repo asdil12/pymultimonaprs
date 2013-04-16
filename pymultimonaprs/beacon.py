@@ -1,5 +1,7 @@
 #!/usr/bin/python2
 
+import os
+
 def encode_lat(lat):
 	lat_dir = 'N' if lat > 0 else 'S'
 	lat_abs = abs(lat)
@@ -20,5 +22,14 @@ def get_beacon_frame(lat, lng, callsign, table, symbol, comment):
 	return "%s>APRS,TCPIP*:%s" % (callsign, payload)
 
 def get_status_frame(callsign, status):
-	payload = ">%s" % (status)
-	return "%s>APRS,TCPIP*:%s" % (callsign, payload)
+	try:
+		if status['file'] and os.path.exists(status['file']):
+			status_text = open(status['file']).read().strip()
+		elif status['text']:
+			status_text = status['text']
+		else:
+			return None
+		payload = ">%s" % (status_text)
+		return "%s>APRS,TCPIP*:%s" % (callsign, payload)
+	except:
+		return None

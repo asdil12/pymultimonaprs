@@ -18,7 +18,10 @@
 		"table": "/",
 		"symbol": "&",
 		"comment": "PyMultimonAPRS iGate",
-		"status": "Running on Raspberry Pi with RTL dongle",
+		"status": {
+			"text": "Running on Raspberry Pi with RTL dongle",
+			"file": false
+		},
 		"send_every": 300
 	}
 }

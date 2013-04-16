@@ -34,11 +34,21 @@ def bc():
 		'symbol': config['beacon']['symbol'],
 		'comment': config['beacon']['comment'],
 	}
+	bcargs_status = {
+		'callsign': config['callsign'],
+		'status': config['beacon']['status'],
+	}
 	while True:
+		# Position
 		tnc2_frame = beacon.get_beacon_frame(**bcargs)
-		ig.send(tnc2_frame)
-		tnc2_frame = beacon.get_status_frame(config['callsign'], config['beacon']['status'])
-		ig.send(tnc2_frame)
+		if tnc2_frame:
+			ig.send(tnc2_frame)
+
+		# Status
+		tnc2_frame = beacon.get_status_frame(**bcargs_status)
+		if tnc2_frame:
+			ig.send(tnc2_frame)
+
 		sleep(config['beacon']['send_every'])
 
 
