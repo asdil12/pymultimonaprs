@@ -42,7 +42,7 @@ You can set `weather` to a json-file. This will be read in like the status-file 
 		"direction": 240,
 		"gust": 200
 	},
-	"temperature": 18,
+	"temperature": 18.5,
 	"humidity": 20,
 	"pressure": 1013.25
 }
@@ -54,7 +54,7 @@ You can set `weather` to a json-file. This will be read in like the status-file 
 - `wind`
 	- `speed` is in km/h
 	- `direction` is in deg
-	- `gust` is in deg
+	- `gust` is in km/h
 - `temperature` is in °C
 - `humidity` is in %
 - `pressure` is in hPa
