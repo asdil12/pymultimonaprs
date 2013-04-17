@@ -56,7 +56,6 @@ def bc():
 		# Weather
 		tnc2_frame = beacon.get_weather_frame(**bcargs_weather)
 		if tnc2_frame:
-			sleep(5) # work around flood protection
 			ig.send(tnc2_frame)
 
 		sleep(config['beacon']['send_every'])
