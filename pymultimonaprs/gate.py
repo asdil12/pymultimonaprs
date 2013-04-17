@@ -36,6 +36,7 @@ class IGate:
 			version = 'GIT'
 
 		# Login
+		print "LOGIN: %s (PyMultimonAPRS %s)" % (self.callsign, version)
 		self.socket.send("user %s pass %s vers PyMultimonAPRS %s filter r/38/-171/1\r\n" % (self.callsign, self.passcode, version))
 
 		server_return = self.socket.recv(1024)
