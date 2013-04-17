@@ -38,6 +38,10 @@ def bc():
 		'callsign': config['callsign'],
 		'status': config['beacon']['status'],
 	}
+	bcargs_weather = {
+		'callsign': config['callsign'],
+		'weather': config['beacon']['weather'],
+	}
 	while True:
 		# Position
 		tnc2_frame = beacon.get_beacon_frame(**bcargs)
@@ -47,6 +51,12 @@ def bc():
 		# Status
 		tnc2_frame = beacon.get_status_frame(**bcargs_status)
 		if tnc2_frame:
+			ig.send(tnc2_frame)
+
+		# Weather
+		tnc2_frame = beacon.get_weather_frame(**bcargs_weather)
+		if tnc2_frame:
+			sleep(5) # work around flood protection
 			ig.send(tnc2_frame)
 
 		sleep(config['beacon']['send_every'])

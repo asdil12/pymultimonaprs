@@ -22,6 +22,7 @@
 			"text": "Running on Raspberry Pi with RTL dongle",
 			"file": false
 		},
+		"weather": false,
 		"send_every": 300
 	}
 }
