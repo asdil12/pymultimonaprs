@@ -4,6 +4,7 @@ import threading
 import socket
 import Queue
 import pkg_resources
+import sys
 
 class IGate:
 	def __init__(self, callsign, passcode, gateway):
@@ -22,12 +23,12 @@ class IGate:
 		# Connect
 		self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		ip = socket.gethostbyname(self.server)
-		print "connecting... %s:%i" % (ip, self.port)
+		print >> sys.stderr, "connecting... %s:%i" % (ip, self.port)
 		self.socket.connect((ip, self.port))
-		print "connected"
+		print >> sys.stderr, "connected"
 
 		server_hello = self.socket.recv(1024)
-		print server_hello.strip(" \r\n")
+		print >> sys.stderr, server_hello.strip(" \r\n")
 
 		# Try to get my version
 		try:
@@ -36,11 +37,11 @@ class IGate:
 			version = 'GIT'
 
 		# Login
-		print "LOGIN: %s (PyMultimonAPRS %s)" % (self.callsign, version)
+		print >> sys.stderr, "LOGIN: %s (PyMultimonAPRS %s)" % (self.callsign, version)
 		self.socket.send("user %s pass %s vers PyMultimonAPRS %s filter r/38/-171/1\r\n" % (self.callsign, self.passcode, version))
 
 		server_return = self.socket.recv(1024)
-		print server_return.strip(" \r\n")
+		print >> sys.stderr, server_return.strip(" \r\n")
 
 		self.socket.setblocking(0)
 
@@ -61,7 +62,7 @@ class IGate:
 			except socket.error, e:
 				if e.errno == 32:
 					# socket disconnected
-					print "socket dead"
+					print >> sys.stderr, "socket dead"
 					self._connect()
 			# read from socket to prevent buffer fillup
 			try:
@@ -70,4 +71,4 @@ class IGate:
 				if e.errno == 11:
 					# buffer empty
 					pass
-		print "thread exit"
+		print >> sys.stderr, "thread exit"
