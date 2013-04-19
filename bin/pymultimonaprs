@@ -7,10 +7,11 @@ import sys
 import logging
 import logging.handlers
 import argparse
+import signal
 
-from pymultimonaprs import multimon
+from pymultimonaprs.multimon import Multimon
 from pymultimonaprs import beacon
-from pymultimonaprs import gate
+from pymultimonaprs.gate import IGate
 from pymultimonaprs.frame import APRSFrame, InvalidFrame
 
 parser = argparse.ArgumentParser(description='HF2APRS-IG Gateway.')
@@ -81,11 +82,15 @@ def bc():
 		sleep(config['beacon']['send_every'])
 
 
-ig = gate.IGate(config['callsign'], config['passcode'], config['gateway'])
+ig = IGate(config['callsign'], config['passcode'], config['gateway'])
+mm = Multimon(mmcb,config)
 
-mmt = threading.Thread(target=multimon.multimon, args=(mmcb,config))
-mmt.setDaemon(True)
-mmt.start()
+def signal_handler(signal, frame):
+	ig.exit()
+	mm.exit()
+	sys.exit(128 + signal)
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
 
+# Start beacon in main thread
 bc()
-

@@ -17,9 +17,14 @@ class IGate:
 		self.socket = None
 		self._sending_queue = Queue.Queue(maxsize=1)
 		self._connect()
+		self._running = True
 		self._worker = threading.Thread(target=self._socket_worker)
 		self._worker.setDaemon(True)
 		self._worker.start()
+
+	def exit(self):
+		self._running = False
+		self._disconnect()
 
 	def _connect(self):
 		# Connect
@@ -47,6 +52,12 @@ class IGate:
 
 		self.socket.setblocking(0)
 
+	def _disconnect(self):
+		try:
+			self.socket.close()
+		except:
+			pass
+
 	def send(self, tnc2_frame):
 		self._sending_queue.put(tnc2_frame)
 
@@ -54,7 +65,7 @@ class IGate:
 		"""
 		Running as a thread, reading from socket, sending queue to socket
 		"""
-		while True:
+		while self._running:
 			try:
 				tnc2_frame = self._sending_queue.get(True, 1)
 				self.log.debug("sending: %s" % tnc2_frame)
@@ -73,4 +84,4 @@ class IGate:
 				if e.errno == 11:
 					# buffer empty
 					pass
-		self.log.info("thread exit")
+		self.log.debug("sending thread exit")
