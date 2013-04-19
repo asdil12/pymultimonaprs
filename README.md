@@ -62,4 +62,4 @@ You can set `weather` to a json-file. This will be read in like the status-file 
 Running
 -------
 
-- Run `systemctl start pymultimonaprs` or just `pymultimonaprs` for testing
+- Run `systemctl start pymultimonaprs` or just `pymultimonaprs -v` for testing

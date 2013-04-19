@@ -5,9 +5,11 @@ import socket
 import Queue
 import pkg_resources
 import sys
+import logging
 
 class IGate:
 	def __init__(self, callsign, passcode, gateway):
+		self.log = logging.getLogger('pymultimonaprs')
 		self.server, self.port = gateway.split(':')
 		self.port = int(self.port)
 		self.callsign = callsign
@@ -23,12 +25,12 @@ class IGate:
 		# Connect
 		self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		ip = socket.gethostbyname(self.server)
-		print >> sys.stderr, "connecting... %s:%i" % (ip, self.port)
+		self.log.info("connecting... %s:%i" % (ip, self.port))
 		self.socket.connect((ip, self.port))
-		print >> sys.stderr, "connected"
+		self.log.info("connected")
 
 		server_hello = self.socket.recv(1024)
-		print >> sys.stderr, server_hello.strip(" \r\n")
+		self.log.info(server_hello.strip(" \r\n"))
 
 		# Try to get my version
 		try:
@@ -37,11 +39,11 @@ class IGate:
 			version = 'GIT'
 
 		# Login
-		print >> sys.stderr, "LOGIN: %s (PyMultimonAPRS %s)" % (self.callsign, version)
+		self.log.info("login %s (PyMultimonAPRS %s)" % (self.callsign, version))
 		self.socket.send("user %s pass %s vers PyMultimonAPRS %s filter r/38/-171/1\r\n" % (self.callsign, self.passcode, version))
 
 		server_return = self.socket.recv(1024)
-		print >> sys.stderr, server_return.strip(" \r\n")
+		self.log.info(server_return.strip(" \r\n"))
 
 		self.socket.setblocking(0)
 
@@ -55,14 +57,14 @@ class IGate:
 		while True:
 			try:
 				tnc2_frame = self._sending_queue.get(True, 1)
-				print "sending: %s" % tnc2_frame
+				self.log.debug("sending: %s" % tnc2_frame)
 				self.socket.send("%s\r\n" % tnc2_frame)
 			except Queue.Empty:
 				pass
 			except socket.error, e:
 				if e.errno == 32:
 					# socket disconnected
-					print >> sys.stderr, "socket dead"
+					self.log.warn("socket dead")
 					self._connect()
 			# read from socket to prevent buffer fillup
 			try:
@@ -71,4 +73,4 @@ class IGate:
 				if e.errno == 11:
 					# buffer empty
 					pass
-		print >> sys.stderr, "thread exit"
+		self.log.info("thread exit")

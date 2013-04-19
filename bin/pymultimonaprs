@@ -3,6 +3,10 @@
 import json
 import threading
 from time import sleep
+import sys
+import logging
+import logging.handlers
+import argparse
 
 from pymultimonaprs import multimon
 from pymultimonaprs import beacon
@@ -11,6 +15,21 @@ from pymultimonaprs.frame import APRSFrame, InvalidFrame
 
 config = json.load(open('/etc/pymultimonaprs.json'))
 
+parser = argparse.ArgumentParser(description='HF2APRS-IG Gateway.')
+parser.add_argument('--syslog', action='store_true', help='Log to syslog')
+parser.add_argument('-v', '--verbose', action='store_true', help='Log all traffic - including beacon')
+args = parser.parse_args()
+
+logger = logging.getLogger('pymultimonaprs')
+loglevel = logging.DEBUG if args.verbose else logging.INFO
+logger.setLevel(loglevel)
+if args.syslog:
+	loghandler = logging.handlers.SysLogHandler(address = '/dev/log')
+else:
+	loghandler = logging.StreamHandler(sys.stdout)
+	formatter = logging.Formatter('[%(asctime)s] %(levelname)+8s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+	loghandler.setFormatter(formatter)
+logger.addHandler(loghandler)
 
 def mmcb(ui_frame):
 	try:
