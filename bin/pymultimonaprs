@@ -13,12 +13,13 @@ from pymultimonaprs import beacon
 from pymultimonaprs import gate
 from pymultimonaprs.frame import APRSFrame, InvalidFrame
 
-config = json.load(open('/etc/pymultimonaprs.json'))
-
 parser = argparse.ArgumentParser(description='HF2APRS-IG Gateway.')
+parser.add_argument('-c', dest='config', default='/etc/pymultimonaprs.json', help='Use this config file')
 parser.add_argument('--syslog', action='store_true', help='Log to syslog')
 parser.add_argument('-v', '--verbose', action='store_true', help='Log all traffic - including beacon')
 args = parser.parse_args()
+
+config = json.load(open(args.config))
 
 logger = logging.getLogger('pymultimonaprs')
 loglevel = logging.DEBUG if args.verbose else logging.INFO
