@@ -32,8 +32,9 @@ Set both `text` and `file` to `false` to disable status beacon.
 
 ### Weather
 
-You can set `weather` to a json-file. This will be read in like the status-file and can look like that:
-
+You can set `weather` to a json-file. eg: `"weather": "/path/to/weather.json",`  
+If you don't want do send weather date, just leave it on `false`.  
+This will be read in like the status-file and can look like that:
 ```json
 {
 	"timestamp": 1366148418,
@@ -58,6 +59,8 @@ You can set `weather` to a json-file. This will be read in like the status-file 
 - `temperature` is in °C
 - `humidity` is in %
 - `pressure` is in hPa
+
+The timestamp **must** be included - everything else is optional.
 
 Running
 -------
