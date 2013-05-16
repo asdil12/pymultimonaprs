@@ -2,7 +2,7 @@
 
 import re
 
-header_re = re.compile(r'^fm (?P<source>\w*-\d{1,2}) to (?P<dest>\w*-\d{1,2}) via (?P<path>[^\s]*) UI. pid=F0$')
+header_re = re.compile(r'^fm (?P<source>\w*(-\d{1,2})?) to (?P<dest>\w*(-\d{1,2})?) via (?P<path>[^\s]*) UI. pid=F0$')
 
 class InvalidFrame(Exception):
 	pass
@@ -17,6 +17,7 @@ class APRSFrame:
 		uiframe = uiframe.replace("\r", "")
 		header, payload = uiframe.split("\n")
 		header = header.strip()
+		header = header.replace('-0', '')
 		payload = payload.strip()
 		try:
 			res = header_re.match(header).groupdict()

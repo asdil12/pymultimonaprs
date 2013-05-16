@@ -37,7 +37,6 @@ def mmcb(ui_frame):
 	try:
 		frame = APRSFrame()
 		frame.import_ui(ui_frame)
-		frame.source.replace('-0', '')
 		if config['append_callsign']:
 			frame.path.extend(['qAR', config['callsign']])
 		tnc2_frame = frame.export_tnc2()
