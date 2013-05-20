@@ -1,0 +1,9 @@
+[Unit]
+Description=PyMultimonAPRS
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/pymultimonaprs --syslog
+
+[Install]
+WantedBy=multi-user.target

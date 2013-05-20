@@ -1,0 +1,98 @@
+#!/usr/bin/python2.7
+
+import json
+import threading
+from time import sleep
+import sys
+import logging
+import logging.handlers
+import argparse
+import signal
+import sys
+reload(sys)
+
+sys.setdefaultencoding("ISO-8859-1")
+
+from pymultimonaprs.multimon import Multimon
+from pymultimonaprs import beacon
+from pymultimonaprs.gate import IGate
+from pymultimonaprs.frame import APRSFrame, InvalidFrame
+
+parser = argparse.ArgumentParser(description='HF2APRS-IG Gateway.')
+parser.add_argument('-c', dest='config', default='/etc/pymultimonaprs.json', help='Use this config file')
+parser.add_argument('--syslog', action='store_true', help='Log to syslog')
+parser.add_argument('-v', '--verbose', action='store_true', help='Log all traffic - including beacon')
+args = parser.parse_args()
+
+config = json.load(open(args.config))
+
+logger = logging.getLogger('pymultimonaprs')
+loglevel = logging.DEBUG if args.verbose else logging.INFO
+logger.setLevel(loglevel)
+if args.syslog:
+	loghandler = logging.handlers.SysLogHandler(address = '/dev/log')
+else:
+	loghandler = logging.StreamHandler(sys.stdout)
+	formatter = logging.Formatter('[%(asctime)s] %(levelname)+8s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+	loghandler.setFormatter(formatter)
+logger.addHandler(loghandler)
+
+def mmcb(ui_frame):
+	try:
+		frame = APRSFrame()
+		frame.import_ui(ui_frame)
+		if config['append_callsign']:
+			frame.path.extend(['qAR', config['callsign']])
+		tnc2_frame = frame.export_tnc2()
+		ig.send(tnc2_frame)
+	except InvalidFrame:
+		pass
+
+def bc():
+	bcargs = {
+		'lat': config['beacon']['lat'],
+		'lng': config['beacon']['lng'],
+		'callsign': config['callsign'],
+		'table': config['beacon']['table'],
+		'symbol': config['beacon']['symbol'],
+		'comment': config['beacon']['comment'],
+	}
+	bcargs_status = {
+		'callsign': config['callsign'],
+		'status': config['beacon']['status'],
+	}
+	bcargs_weather = {
+		'callsign': config['callsign'],
+		'weather': config['beacon']['weather'],
+	}
+	while True:
+		# Position
+		tnc2_frame = beacon.get_beacon_frame(**bcargs)
+		if tnc2_frame:
+			ig.send(tnc2_frame)
+
+		# Status
+		tnc2_frame = beacon.get_status_frame(**bcargs_status)
+		if tnc2_frame:
+			ig.send(tnc2_frame)
+
+		# Weather
+		tnc2_frame = beacon.get_weather_frame(**bcargs_weather)
+		if tnc2_frame:
+			ig.send(tnc2_frame)
+
+		sleep(config['beacon']['send_every'])
+
+
+ig = IGate(config['callsign'], config['passcode'], config['gateway'])
+mm = Multimon(mmcb,config)
+
+def signal_handler(signal, frame):
+	ig.exit()
+	mm.exit()
+	sys.exit(0)
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
+
+# Start beacon in main thread
+bc()
