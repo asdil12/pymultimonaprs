@@ -7,7 +7,8 @@ Original initiated by Dominik Heidler under pymultimonaprs
 
 Install rtl-sdr from osmocom
 
-Install multimonNG
+patch multimonNG with www.kubonweb.de/files/0001-implement-APRS-display-mode-for-iGates.patch and compile
+install to /usr/local/bin
 
 sudo python2 setup.py install
 
