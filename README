@@ -9,6 +9,6 @@ Install rtl-sdr from osmocom
 
 Install multimonNG
 
-Copy config.json.sample to config.json and edit it.
+sudo python2 setup.py install
 
-Run ./pyrtlmultimonaprs.py
+Run pymultimonaprs
