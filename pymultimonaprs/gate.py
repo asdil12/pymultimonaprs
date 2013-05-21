@@ -58,8 +58,8 @@ class IGate:
 		except:
 			pass
 
-	def send(self, tnc2_frame):
-		self._sending_queue.put(tnc2_frame)
+	def send(self, frame):
+		self._sending_queue.put(frame)
 
 	def _socket_worker(self):
 		"""
@@ -67,9 +67,9 @@ class IGate:
 		"""
 		while self._running:
 			try:
-				tnc2_frame = self._sending_queue.get(True, 1)
-				self.log.debug("sending: %s" % tnc2_frame)
-				self.socket.send("%s\r\n" % tnc2_frame)
+				frame = self._sending_queue.get(True, 1)
+				self.log.debug("sending: %s" % frame.export(False))
+				self.socket.send("%s\r\n" % frame.export())
 			except Queue.Empty:
 				pass
 			except socket.error, e:

@@ -3,6 +3,7 @@
 import os
 import json
 from datetime import datetime
+from pymultimonaprs.frame import APRSFrame
 
 def encode_lat(lat):
 	lat_dir = 'N' if lat > 0 else 'S'
@@ -18,21 +19,29 @@ def encode_lng(lng):
 	lng_min = (lng_abs % 1) * 60
 	return "%03i%05.2f%c" % (lng_deg, lng_min, lng_dir)
 
+def mkframe(callsign, payload):
+	frame = APRSFrame()
+	frame.source = callsign
+	frame.dest = u'APRS'
+	frame.path = [u'TCPIP*']
+	frame.payload = payload
+	return frame
+
 def get_beacon_frame(lat, lng, callsign, table, symbol, comment):
 	pos = "%s%s%s" % (encode_lat(lat), table, encode_lng(lng))
 	payload = "=%s%s %s" % (pos, symbol, comment)
-	return "%s>APRS,TCPIP*:%s" % (callsign, payload)
+	return mkframe(callsign, payload)
 
 def get_status_frame(callsign, status):
 	try:
 		if status['file'] and os.path.exists(status['file']):
-			status_text = open(status['file']).read().strip()
+			status_text = open(status['file']).read().decode('UTF-8').strip()
 		elif status['text']:
 			status_text = status['text']
 		else:
 			return None
 		payload = ">%s" % status_text
-		return "%s>APRS,TCPIP*:%s" % (callsign, payload)
+		return mkframe(callsign, payload)
 	except:
 		return None
 
@@ -82,6 +91,6 @@ def get_weather_frame(callsign, weather):
 			wenc += "b%04d" % round(w['pressure'] * 10)
 
 		payload = "_%sPyMM" % wenc
-		return "%s>APRS,TCPIP*:%s" % (callsign, payload)
+		return mkframe(callsign, payload)
 	except:
 		return None

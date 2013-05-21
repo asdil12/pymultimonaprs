@@ -38,9 +38,8 @@ def mmcb(ui_frame):
 		frame = APRSFrame()
 		frame.import_ui(ui_frame)
 		if config['append_callsign']:
-			frame.path.extend(['qAR', config['callsign']])
-		tnc2_frame = frame.export_tnc2()
-		ig.send(tnc2_frame)
+			frame.path.extend([u'qAR', config['callsign']])
+		ig.send(frame)
 	except InvalidFrame:
 		pass
 
@@ -63,19 +62,19 @@ def bc():
 	}
 	while True:
 		# Position
-		tnc2_frame = beacon.get_beacon_frame(**bcargs)
-		if tnc2_frame:
-			ig.send(tnc2_frame)
+		frame = beacon.get_beacon_frame(**bcargs)
+		if frame:
+			ig.send(frame)
 
 		# Status
-		tnc2_frame = beacon.get_status_frame(**bcargs_status)
-		if tnc2_frame:
-			ig.send(tnc2_frame)
+		frame = beacon.get_status_frame(**bcargs_status)
+		if frame:
+			ig.send(frame)
 
 		# Weather
-		tnc2_frame = beacon.get_weather_frame(**bcargs_weather)
-		if tnc2_frame:
-			ig.send(tnc2_frame)
+		frame = beacon.get_weather_frame(**bcargs_weather)
+		if frame:
+			ig.send(frame)
 
 		sleep(config['beacon']['send_every'])
 

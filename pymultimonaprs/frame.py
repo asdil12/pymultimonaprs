@@ -12,8 +12,11 @@ class APRSFrame:
 		self.source = None
 		self.dest = None
 		self.path = []
+		self.payload = unicode()
 
-	def import_ui(self, uiframe):
+	def import_ui(self, uiframe, decode=True):
+		if decode:
+			uiframe = uiframe.decode('ISO-8859-1')
 		uiframe = uiframe.replace("\r", "")
 		header, payload = uiframe.split("\n")
 		header = header.strip()
@@ -28,8 +31,10 @@ class APRSFrame:
 			raise InvalidFrame()
 		self.payload = payload
 
-	def export_tnc2(self):
+	def export(self, encode=True):
 		tnc2 = "%s>%s,%s:%s" % (self.source, self.dest, ','.join(self.path), self.payload)
 		if len(tnc2) > 510:
 			tnc2 = tnc2[:510]
+		if encode:
+			tnc2 = tnc2.encode('ISO-8859-1')
 		return tnc2
