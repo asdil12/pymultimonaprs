@@ -2,7 +2,7 @@
 
 import re
 
-header_re = re.compile(r'^fm (?P<source>\w*(-\d{1,2})?) to (?P<dest>\w*(-\d{1,2})?) via (?P<path>[^\s]*) UI. pid=F0$')
+header_re = re.compile(r'^(?P<source>\w*(-\d{1,2})?)>(?P<dest>\w*(-\d{1,2})?),(?P<path>[^\s]*)')
 
 class InvalidFrame(Exception):
 	pass
@@ -14,13 +14,12 @@ class APRSFrame:
 		self.path = []
 		self.payload = unicode()
 
-	def import_ui(self, uiframe, decode=True):
+	def import_tnc2(self, tnc2_frame, decode=True):
 		if decode:
-			uiframe = uiframe.decode('ISO-8859-1')
-		uiframe = uiframe.replace("\r", "")
-		header, payload = uiframe.split("\n")
+			tnc2_frame = tnc2_frame.decode('ISO-8859-1')
+		tnc2_frame = tnc2_frame.replace("\r", "")
+		header, payload = tnc2_frame.split(":", 1)
 		header = header.strip()
-		header = header.replace('-0', '')
 		payload = payload.strip()
 		try:
 			res = header_re.match(header).groupdict()

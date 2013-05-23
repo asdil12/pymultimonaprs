@@ -4,8 +4,7 @@ import threading
 import subprocess
 import re
 
-start_frame_re = re.compile(r'^AFSK1200: (.*)$')
-aprs_datatypes = [0x1C, 0x1D, '!', '=', ')', ';', '@', '/', '>', '\'', '`']
+start_frame_re = re.compile(r'^APRS: (.*)')
 
 class Multimon:
 	def __init__(self, frame_handler, config):
@@ -25,7 +24,7 @@ class Multimon:
 	def _start(self):
 		if self.config['source'] == 'pulse':
 			proc_mm = subprocess.Popen(
-				['multimonNG', '-a', 'AFSK1200'],
+				['multimon-ng', '-a', 'AFSK1200', '-A'],
 				stdout=subprocess.PIPE, stderr=open('/dev/null')
 			)
 		else:
@@ -42,7 +41,7 @@ class Multimon:
 					stdout=subprocess.PIPE, stderr=open('/dev/null')
 				)
 			proc_mm = subprocess.Popen(
-				['multimonNG', '-a', 'AFSK1200', '-'],
+				['multimon-ng', '-a', 'AFSK1200', '-A', '-'],
 				stdin=proc_src.stdout,
 				stdout=subprocess.PIPE, stderr=open('/dev/null')
 			)
@@ -58,18 +57,10 @@ class Multimon:
 				pass
 
 	def _mm_worker(self):
-		awaiting_payload = False
-		frame_buffer = ''
-
 		while self._running:
 			line = self.subprocs['mm'].stdout.readline()
 			line = line.strip()
 			m = start_frame_re.match(line)
 			if m:
-				awaiting_payload = True
-				frame_buffer = "%s\n" % m.group(1)
-			elif awaiting_payload:
-				awaiting_payload = False
-				if line[0] in aprs_datatypes:
-					frame_buffer += line
-					self.frame_handler(frame_buffer)
+				tnc2_frame = m.group(1)
+				self.frame_handler(tnc2_frame)

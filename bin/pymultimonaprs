@@ -33,10 +33,10 @@ else:
 	loghandler.setFormatter(formatter)
 logger.addHandler(loghandler)
 
-def mmcb(ui_frame):
+def mmcb(tnc2_frame):
 	try:
 		frame = APRSFrame()
-		frame.import_ui(ui_frame)
+		frame.import_tnc2(tnc2_frame)
 		if config['append_callsign']:
 			frame.path.extend([u'qAR', config['callsign']])
 		ig.send(frame)

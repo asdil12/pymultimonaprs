@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
 	name='pymultimonaprs',
-	version='0.8.3',
+	version='0.8.4',
 	license='GPL',
 	description='HF2APRS-IG Gateway',
 	author='Dominik Heidler',
