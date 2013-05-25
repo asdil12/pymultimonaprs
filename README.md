@@ -62,6 +62,11 @@ This will be read in like the status-file and can look like that:
 
 The timestamp **must** be included - everything else is optional.
 
+### Symbol
+
+The correct symbol is already selected.
+If you still want to change it, you can find the symbol table [here](https://github.com/asdil12/pymultimonaprs/wiki/Symbol-Table).
+
 Running
 -------
 
