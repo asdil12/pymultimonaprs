@@ -1,0 +1,1 @@
+{"name":"PyMultimonAPRS","tagline":"HF 2 APRS-IS Gateway","body":"This tool receives APRS packages using a soundcard or the RTL-SDR and redirects them to the APRS-IS network (which is the data-source for aprs.fi).","google":"","note":"Don't delete this file! It's used internally to help with page regeneration."}
