@@ -6,8 +6,8 @@
 	"source": "rtl",
 	"rtl": {
 		"freq": 144.800,
-		"ppm": 18,
-		"gain": 42
+		"ppm": 0,
+		"gain": 0
 	},
 	"alsa": {
 		"device": "default"
