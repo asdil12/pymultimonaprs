@@ -41,7 +41,7 @@ class Multimon:
 					stdout=subprocess.PIPE, stderr=open('/dev/null')
 				)
 			proc_mm = subprocess.Popen(
-				['multimon-ng', '-a', 'AFSK1200', '-A', '-'],
+				['multimon-ng', '-a', 'AFSK1200', '-A', '-t', 'raw', '-'],
 				stdin=proc_src.stdout,
 				stdout=subprocess.PIPE, stderr=open('/dev/null')
 			)
