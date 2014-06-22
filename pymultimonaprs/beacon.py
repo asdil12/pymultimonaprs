@@ -29,7 +29,7 @@ def mkframe(callsign, payload):
 
 def get_beacon_frame(lat, lng, callsign, table, symbol, comment):
 	pos = "%s%s%s" % (encode_lat(lat), table, encode_lng(lng))
-	payload = "=%s%s %s" % (pos, symbol, comment)
+	payload = "=%s%s%s" % (pos, symbol, comment)
 	return mkframe(callsign, payload)
 
 def get_status_frame(callsign, status):
