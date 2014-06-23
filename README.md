@@ -1,7 +1,7 @@
 pymultimonaprs
 ==============
 
-HF2APRS-IG Gateway supporting this backends:
+RF2APRS-IG Gateway supporting this backends:
 
 - Pulseaudio
 - ALSA
