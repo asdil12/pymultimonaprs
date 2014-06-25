@@ -23,6 +23,7 @@
 			"file": false
 		},
 		"weather": false,
-		"send_every": 300
+		"send_every": 300,
+		"ambiguity": 0
 	}
 }

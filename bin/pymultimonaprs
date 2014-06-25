@@ -51,6 +51,7 @@ def bc():
 		'table': config['beacon']['table'],
 		'symbol': config['beacon']['symbol'],
 		'comment': config['beacon']['comment'],
+		'ambiguity': config['beacon'].get('ambiguity', 0),
 	}
 	bcargs_status = {
 		'callsign': config['callsign'],

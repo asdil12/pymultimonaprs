@@ -30,6 +30,15 @@ Set the status `text`, or set a status `file` - the content of this file will be
 This way you can eg. monitor your battery status using APRS-IG.
 Set both `text` and `file` to `false` to disable status beacon.
 
+#### Position Ambiguity
+
+To hide your exact position you can set the ambiguity value to a value from 0 to 4.
+- 0 will not hide anything
+- 1 will decrease precision to 1/10 of a min
+- 2 will decrease precision to 1 min
+- 3 will decrease precision to 10 min
+- 4 will decrease precision to 1°
+
 ### Weather
 
 You can set `weather` to a json-file. eg: `"weather": "/path/to/weather.json",`  
