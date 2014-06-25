@@ -5,6 +5,17 @@ import json
 from datetime import datetime
 from pymultimonaprs.frame import APRSFrame
 
+def process_ambiguity(pos, ambiguity):
+	num = bytearray(pos)
+	for i in range(0, ambiguity):
+		if i > 1:
+			# skip the dot
+			i += 1
+		# skip the direction
+		i += 2
+		num[-i] = " "
+	return str(num)
+
 def encode_lat(lat):
 	lat_dir = 'N' if lat > 0 else 'S'
 	lat_abs = abs(lat)
@@ -27,8 +38,10 @@ def mkframe(callsign, payload):
 	frame.payload = payload
 	return frame
 
-def get_beacon_frame(lat, lng, callsign, table, symbol, comment):
-	pos = "%s%s%s" % (encode_lat(lat), table, encode_lng(lng))
+def get_beacon_frame(lat, lng, callsign, table, symbol, comment, ambiguity):
+	enc_lat = process_ambiguity(encode_lat(lat), ambiguity)
+	enc_lng = process_ambiguity(encode_lng(lng), ambiguity)
+	pos = "%s%s%s" % (enc_lat, table, enc_lng)
 	payload = "=%s%s%s" % (pos, symbol, comment)
 	return mkframe(callsign, payload)
 
