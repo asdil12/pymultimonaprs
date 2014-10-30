@@ -27,6 +27,8 @@ loglevel = logging.DEBUG if args.verbose else logging.INFO
 logger.setLevel(loglevel)
 if args.syslog:
 	loghandler = logging.handlers.SysLogHandler(address = '/dev/log')
+	formater = logging.Formatter('pymultimonaprs: %(message)s')
+	loghandler.setFormatter(formater)
 else:
 	loghandler = logging.StreamHandler(sys.stdout)
 	formatter = logging.Formatter('[%(asctime)s] %(levelname)+8s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
