@@ -79,11 +79,13 @@ def bc():
 
 		sleep(config['beacon']['send_every'])
 
+logger.info("Starting pymultimonaprs")
 
 ig = IGate(config['callsign'], config['passcode'], config['gateway'])
 mm = Multimon(mmcb,config)
 
 def signal_handler(signal, frame):
+	logger.info("Stopping pymultimonaprs")
 	ig.exit()
 	mm.exit()
 	sys.exit(0)
