@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 ### BEGIN INIT INFO
 # Provides: pymultimonaprs
 # Required-Start: $remote_fs $network $syslog
@@ -8,35 +8,115 @@
 # Short-Description: start/stop of pymultimonaprs
 ### END INIT INFO
 
-# don't get killed by myself
-trap "" 15
-# if you don't like this, please submit
-# a patch with the correct debian start-stop-daemon
-# usage
-
 # for some reason debian doesn't have /usr/local/bin in PATH
 # when running init scripts
 PATH=/usr/local/bin:/sbin:/usr/sbin:/bin:/usr/bin
 
+NAME=pymultimonaprs
+# Exit if the package is not installed
+which "$NAME" >/dev/null || exit 1
+DAEMON=`which "$NAME"`
+DAEMON_ARGS="--syslog"
+PIDFILE=/var/run/$NAME.pid
+SCRIPTNAME=/etc/init.d/$NAME
+
+# Load the VERBOSE setting and other rcS variables
+. /lib/init/vars.sh
+
+# Define LSB log_* functions.
+# Depend on lsb-base (>= 3.2-14) to ensure that this file is present
+# and status_of_proc is working.
+. /lib/lsb/init-functions
+
+if [ "$1" == "start" ] || [ "$1" == "stop" ] || [ "$1" == "restart" ] ; then
+	if [ "`whoami`" != "root" ] ; then
+		echo "ERROR: This script must be called by root (or using sudo)"
+		exit 3
+	fi
+fi
+
+do_start()
+{
+	# Return
+	#   0 if daemon has been started
+	#   1 if daemon was already running
+	#   2 if daemon could not be started
+	if [ -f $PIDFILE ] ; then
+		if [ -e "/proc/`cat $PIDFILE`/cmdline" ] ; then
+			return 1
+		fi
+	fi
+	start-stop-daemon --start --quiet --make-pidfile --background --pidfile $PIDFILE --exec $DAEMON -- \
+		$DAEMON_ARGS \
+		|| return 2
+}
+
+do_stop()
+{
+	# Return
+	#   0 if daemon has been stopped
+	#   1 if daemon was already stopped
+	#   2 if daemon could not be stopped
+	#   other if a failure occurred
+	start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE --name $NAME
+	RETVAL="$?"
+	[ "$RETVAL" = 2 ] && return 2
+	# Wait for children to finish too if this is a daemon that forks
+	# and if the daemon is only ever run from this initscript.
+	# If the above conditions are not satisfied then add some other code
+	# that waits for the process to drop all resources that could be
+	# needed by services started subsequently.  A last resort is to
+	# sleep for some time.
+	start-stop-daemon --stop --quiet --oknodo --retry=0/30/KILL/5 --exec $DAEMON
+	[ "$?" = 2 ] && return 2
+	# Many daemons don't delete their pidfiles when they exit.
+	rm -f $PIDFILE
+	return "$RETVAL"
+}
+
 case "$1" in
-	start)
-		echo "Starting pymultimonaprs"
-		nohup pymultimonaprs --syslog >/dev/null 2>&1 &
+  start)
+	log_daemon_msg "Starting $DESC" "$NAME"
+	do_start
+	case "$?" in
+		0) log_end_msg 0 ;;
+		1) echo "" ; log_warning_msg "$NAME is already running" ;;
+		2) log_end_msg 1 ;;
+	esac
 	;;
-	stop)
-		echo "Stopping pymultimonaprs"
-		killall pymultimonaprs
+  stop)
+	log_daemon_msg "Stopping $DESC" "$NAME"
+	do_stop
+	case "$?" in
+		0|1) log_end_msg 0 ;;
+		2) log_end_msg 1 ;;
+	esac
 	;;
-	restart)
-		$0 stop
-		sleep 1
-		$0 start
+  status)
+	status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
 	;;
-	*)
-		echo "Usage: /etc/init.d/pymultimonaprs {start|stop|restart}"
-		exit 1
+  restart)
+	log_daemon_msg "Restarting $DESC" "$NAME"
+	do_stop
+	case "$?" in
+	  0|1)
+		do_start
+		case "$?" in
+			0) log_end_msg 0 ;;
+			1) log_end_msg 1 ;; # Old process is still running
+			*) log_end_msg 1 ;; # Failed to start
+		esac
+		;;
+	  *)
+		# Failed to stop
+		log_end_msg 1
+		;;
+	esac
+	;;
+  *)
+	echo "Usage: $SCRIPTNAME {start|stop|status|restart}" >&2
+	exit 3
 	;;
 esac
 
-exit 0
-
+:
