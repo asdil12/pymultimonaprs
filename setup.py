@@ -2,14 +2,25 @@
 
 from distutils.core import setup
 from distutils.command.install import install
+import pkg_resources
+import os
+import shutil
 
 class post_install(install):
 	def run(self):
+		# cleanup old egg-info files
+		try:
+			while True:
+				p = pkg_resources.get_distribution("pymultimonaprs")
+				egg_info = os.path.join(p.location, p.egg_name()+".egg-info")
+				print "Deleting old egg-info: %s" % egg_info
+				os.unlink(egg_info)
+				reload(pkg_resources)
+		except pkg_resources.DistributionNotFound:
+			pass
 		install.run(self)
 		# install config file
 		print ""
-		import os
-		import shutil
 		cd = os.path.dirname(os.path.realpath(__file__))
 		src = os.path.join(cd, "pymultimonaprs.json")
 		if os.path.isfile("/etc/pymultimonaprs.json"):
