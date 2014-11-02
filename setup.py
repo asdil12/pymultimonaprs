@@ -12,9 +12,14 @@ class post_install(install):
 		try:
 			while True:
 				p = pkg_resources.get_distribution("pymultimonaprs")
-				egg_info = os.path.join(p.location, p.egg_name()+".egg-info")
-				print "Deleting old egg-info: %s" % egg_info
-				os.unlink(egg_info)
+				for f in os.listdir(p.location):
+					if f.startswith("pymultimonaprs") and f.endswith(".egg-info"):
+						egg_info = os.path.join(p.location, f)
+						try:
+							print "Deleting old egg-info: %s" % egg_info
+							os.unlink(egg_info)
+						except:
+							pass
 				reload(pkg_resources)
 		except pkg_resources.DistributionNotFound:
 			pass
