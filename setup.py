@@ -2,38 +2,43 @@
 
 from distutils.core import setup
 from distutils.command.install import install
+from distutils.dir_util import mkpath
 import pkg_resources
 import os
 import shutil
 
 class post_install(install):
 	def run(self):
-		# cleanup old egg-info files
-		try:
-			while True:
-				p = pkg_resources.get_distribution("pymultimonaprs")
-				for f in os.listdir(p.location):
-					if f.startswith("pymultimonaprs") and f.endswith(".egg-info"):
-						egg_info = os.path.join(p.location, f)
-						try:
-							print "Deleting old egg-info: %s" % egg_info
-							os.unlink(egg_info)
-						except:
-							pass
-				reload(pkg_resources)
-		except pkg_resources.DistributionNotFound:
-			pass
+		if self.root == "/":
+			# cleanup old egg-info files
+			try:
+				while True:
+					p = pkg_resources.get_distribution("pymultimonaprs")
+					for f in os.listdir(p.location):
+						if f.startswith("pymultimonaprs") and f.endswith(".egg-info"):
+							egg_info = os.path.join(p.location, f)
+							try:
+								print "Deleting old egg-info: %s" % egg_info
+								os.unlink(egg_info)
+							except:
+								pass
+					reload(pkg_resources)
+			except pkg_resources.DistributionNotFound:
+				pass
 		install.run(self)
 		# install config file
 		print ""
 		cd = os.path.dirname(os.path.realpath(__file__))
 		src = os.path.join(cd, "pymultimonaprs.json")
-		if os.path.isfile("/etc/pymultimonaprs.json"):
-			print "Warning: /etc/pymultimonaprs.json already exists! Saved new config file to /etc/pymultimonaprs.json.new"
-			shutil.copyfile(src, "/etc/pymultimonaprs.json.new")
+		dest = os.path.join(self.root, "etc/pymultimonaprs.json")
+		dest_new = os.path.join(self.root, "etc/pymultimonaprs.json.new")
+		mkpath(os.path.dirname(dest))
+		if os.path.isfile(dest):
+			print "Warning: %s already exists! Saved new config file to %s" % (dest, dest_new)
+			shutil.copyfile(src, dest_new)
 		else:
-			print "Installing config file to /etc/pymultimonaprs.json"
-			shutil.copyfile(src, "/etc/pymultimonaprs.json")
+			print "Installing config file to %s" % dest
+			shutil.copyfile(src, dest)
 
 
 
