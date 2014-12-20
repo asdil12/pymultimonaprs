@@ -5,11 +5,17 @@ from distutils.command.install import install
 from distutils.dir_util import mkpath
 import pkg_resources
 import os
+import sys
 import shutil
 
 class post_install(install):
 	def run(self):
-		if self.root == "/":
+		root = getattr(self, "root", "/") or "/"
+		print "Using '%s' as root" % root
+		if root == "/":
+			if os.getuid() != 0:
+				print "ERROR: Can't install to root '/' without root permissions"
+				sys.exit(1)
 			# cleanup old egg-info files
 			try:
 				while True:
@@ -30,8 +36,8 @@ class post_install(install):
 		print ""
 		cd = os.path.dirname(os.path.realpath(__file__))
 		src = os.path.join(cd, "pymultimonaprs.json")
-		dest = os.path.join(self.root, "etc/pymultimonaprs.json")
-		dest_new = os.path.join(self.root, "etc/pymultimonaprs.json.new")
+		dest = os.path.join(root, "etc/pymultimonaprs.json")
+		dest_new = os.path.join(root, "etc/pymultimonaprs.json.new")
 		mkpath(os.path.dirname(dest))
 		if os.path.isfile(dest):
 			print "Warning: %s already exists! Saved new config file to %s" % (dest, dest_new)
