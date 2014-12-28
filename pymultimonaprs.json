@@ -7,7 +7,8 @@
 	"rtl": {
 		"freq": 144.800,
 		"ppm": 0,
-		"gain": 0
+		"gain": 0,
+		"device_index": 0
 	},
 	"alsa": {
 		"device": "default"
