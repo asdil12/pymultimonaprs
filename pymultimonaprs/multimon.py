@@ -31,7 +31,8 @@ class Multimon:
 			if self.config['source'] == 'rtl':
 				proc_src = subprocess.Popen(
 					['rtl_fm', '-f', str(int(self.config['rtl']['freq'] * 1e6)), '-s', '22050',
-					'-p', str(self.config['rtl']['ppm']), '-g', str(self.config['rtl']['gain']), '-'],
+					'-p', str(self.config['rtl']['ppm']), '-g', str(self.config['rtl']['gain']), 
+					'-d', str(self.config['rtl']['device_index']), '-'],
 					stdout=subprocess.PIPE, stderr=open('/dev/null')
 				)
 			elif self.config['source'] == 'alsa':
