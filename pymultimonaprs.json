@@ -8,6 +8,7 @@
 		"freq": 144.800,
 		"ppm": 0,
 		"gain": 0,
+		"offset_tuning": false,
 		"device_index": 0
 	},
 	"alsa": {
