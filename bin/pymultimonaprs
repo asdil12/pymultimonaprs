@@ -23,7 +23,7 @@ args = parser.parse_args()
 config = json.load(open(args.config))
 
 logger = logging.getLogger('pymultimonaprs')
-loglevel = logging.DEBUG if args.verbose else logging.INFO
+loglevel = logging.DEBUG if (int(config['rtl']['debug'] == 1)) else logging.INFO
 logger.setLevel(loglevel)
 if args.syslog:
 	loghandler = logging.handlers.SysLogHandler(address = '/dev/log')
