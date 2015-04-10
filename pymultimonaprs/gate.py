@@ -7,6 +7,7 @@ import pkg_resources
 import sys
 import logging
 import select
+import errno
 from time import sleep
 
 class IGate:
@@ -109,8 +110,12 @@ class IGate:
 				# [Errno  32] Broken Pipe
 				# [Errno 104] Connection reset by peer
 				# [Errno 110] Connection time out
-				self.log.warn("Connection issue: '%s'" % str(e))
-				sleep(1)
-				# try to reconnect
-				self._connect()
+				if e.errno == errno.EAGAIN or e.errno == errno.EWOULDBLOCK:
+					# prevent reconnecting on these errors
+					sleep(1)
+				else:
+					self.log.warn("Connection issue: '%s'" % str(e))
+					sleep(1)
+					# try to reconnect
+					self._connect()
 		self.log.debug("sending thread exit")
