@@ -68,9 +68,9 @@ class IGate:
 		except:
 			pass
 
-			# wait 10sec for queue slot, then drop the data
 	def send(self, frame):
 		try:
+			# wait 10sec for queue slot, then drop the data
 			self._sending_queue.put(frame, True, 10)
 		except Queue.Full as e:
 			self.log.warn("Lost TX data (queue full): '%s'" % frame.export(False))
