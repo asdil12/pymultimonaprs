@@ -41,7 +41,16 @@ def mmcb(tnc2_frame):
 		frame.import_tnc2(tnc2_frame)
 		if config['append_callsign']:
 			frame.path.extend([u'qAR', config['callsign']])
-		ig.send(frame)
+
+		# Filter packets from TCP2RF gateways
+		reject_paths = set(["TCPIP", "TCPIP*", "NOGATE", "RFONLY"])
+		# '}' is the Third-Party Data Type Identifier (used to encapsulate pkgs)
+		# indicating traffic from the internet
+		if len(reject_paths.intersection(frame.path)) > 0 or frame.payload.startswith("}"):
+			logger.debug("rejected: %s" % frame.export(False))
+		else:
+			ig.send(frame)
+
 	except InvalidFrame:
 		pass
 
