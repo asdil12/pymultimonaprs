@@ -8,13 +8,17 @@ import sys
 import logging
 import select
 import errno
+import itertools
 from time import sleep
 
 class IGate:
-	def __init__(self, callsign, passcode, gateway):
+	def __init__(self, callsign, passcode, gateways):
 		self.log = logging.getLogger('pymultimonaprs')
-		self.server, self.port = gateway.split(':')
-		self.port = int(self.port)
+		if type(gateways) is list:
+			self.gateways = itertools.cycle(gateways)
+			self.gateway = False
+		else:
+			self.gateway = gateways #old config, single hostname as a string
 		self.callsign = callsign
 		self.passcode = passcode
 		self.socket = None
@@ -35,6 +39,9 @@ class IGate:
 			try:
 				# Connect
 				self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+				gateway = self.gateway or next(self.gateways)
+				self.server, self.port = gateway.split(':')
+				self.port = int(self.port)
 				ip = socket.gethostbyname(self.server)
 				self.log.info("connecting... %s:%i" % (ip, self.port))
 				self.socket.connect((ip, self.port))
@@ -59,7 +66,7 @@ class IGate:
 
 				connected = True
 			except socket.error as e:
-				self.log.warn("Error when connecting to server: '%s'" % str(e))
+				self.log.warn("Error when connecting to %s:%d: '%s'" % (self.server,self.port,str(e)))
 				sleep(1)
 
 	def _disconnect(self):
