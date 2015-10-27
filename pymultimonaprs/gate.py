@@ -14,7 +14,11 @@ from time import sleep
 class IGate:
 	def __init__(self, callsign, passcode, gateways):
 		self.log = logging.getLogger('pymultimonaprs')
-		self.gateways = itertools.cycle(gateways)
+		if type(gateways) is list:
+			self.gateways = itertools.cycle(gateways)
+			self.gateway = False
+		else:
+			self.gateway = gateways #old config, single hostname as a string
 		self.callsign = callsign
 		self.passcode = passcode
 		self.socket = None
@@ -35,7 +39,7 @@ class IGate:
 			try:
 				# Connect
 				self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-				gateway = next(self.gateways)
+				gateway = self.gateway or next(self.gateways)
 				self.server, self.port = gateway.split(':')
 				self.port = int(self.port)
 				ip = socket.gethostbyname(self.server)
