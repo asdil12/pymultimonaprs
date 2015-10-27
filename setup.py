@@ -50,7 +50,7 @@ class post_install(install):
 
 setup(
 	name='pymultimonaprs',
-	version='1.1.1',
+	version='1.2.0',
 	license='GPL',
 	description='RF2APRS-IG Gateway',
 	author='Dominik Heidler',
