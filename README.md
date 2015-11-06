@@ -71,6 +71,10 @@ This will be read in like the status-file and can look like that:
 	- `direction` is in deg
 	- `gust` is in km/h
 - `temperature` is in °C
+- `rain`
+	- `rainlast1h` is in mm
+	- `rainlast24h` is in mm
+	- `rainmidnight` is in mm
 - `humidity` is in %
 - `pressure` is in hPa
 
