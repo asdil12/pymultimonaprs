@@ -53,6 +53,11 @@ This will be read in like the status-file and can look like that:
 		"gust": 200
 	},
 	"temperature": 18.5,
+	"rain": {
+		"rainlast1h": 10,
+		"rainlast24h": 20,
+		"rainmidnight": 15
+	},
 	"humidity": 20,
 	"pressure": 1013.25
 }
@@ -66,6 +71,10 @@ This will be read in like the status-file and can look like that:
 	- `direction` is in deg
 	- `gust` is in km/h
 - `temperature` is in °C
+- `rain`
+	- `rainlast1h` is in mm
+	- `rainlast24h` is in mm
+	- `rainmidnight` is in mm
 - `humidity` is in %
 - `pressure` is in hPa
 
