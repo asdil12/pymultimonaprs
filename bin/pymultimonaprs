@@ -91,13 +91,8 @@ def bc():
 		sleep(config['beacon']['send_every'])
 
 logger.info("Starting pymultimonaprs")
-				
-if 'preferred_protocol' in config:
-	preferred_protocol = config['preferred_protocol'].lower()
-else:
-	# Keep old behavior with ipv4 only if nothing specified
-	preferred_protocol = 'ipv4'
-	logger.info("Preferred protocol not specified, fallback to only IPv4")
+
+preferred_protocol = config.get("preferred_protocol", "any").lower()
 
 ig = IGate(config['callsign'], config['passcode'], config['gateway'], preferred_protocol)
 mm = Multimon(mmcb,config)
