@@ -12,7 +12,7 @@ import itertools
 from time import sleep
 
 class IGate:
-	def __init__(self, callsign, passcode, gateways, prefered_protocol):
+	def __init__(self, callsign, passcode, gateways, preferred_protocol):
 		self.log = logging.getLogger('pymultimonaprs')
 		if type(gateways) is list:
 			self.gateways = itertools.cycle(gateways)
@@ -21,7 +21,7 @@ class IGate:
 			self.gateway = gateways #old config, single hostname as a string
 		self.callsign = callsign
 		self.passcode = passcode
-		self.prefered_protocol = prefered_protocol
+		self.preferred_protocol = preferred_protocol
 		self.socket = None
 		self._sending_queue = Queue.Queue(maxsize=1)
 		self._connect()
@@ -43,9 +43,9 @@ class IGate:
 				self.server, self.port = gateway.split(':')
 				self.port = int(self.port)
 				
-				if self.prefered_protocol == 'ipv6':
+				if self.preferred_protocol == 'ipv6':
 					addrinfo = socket.getaddrinfo(self.server, self.port, socket.AF_INET6)
-				elif self.prefered_protocol == 'ipv4':
+				elif self.preferred_protocol == 'ipv4':
 					addrinfo = socket.getaddrinfo(self.server, self.port, socket.AF_INET)
 				else:
 					addrinfo = socket.getaddrinfo(self.server, self.port)
