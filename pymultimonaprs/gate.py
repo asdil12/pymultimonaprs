@@ -40,7 +40,10 @@ class IGate:
 			try:
 				# Connect
 				gateway = self.gateway or next(self.gateways)
-				self.server, self.port = gateway.split(':')
+				if gateway.startswith("["):
+					self.server, self.port = gateway.lstrip("[").split("]:")
+				else:
+					self.server, self.port = gateway.split(':')
 				self.port = int(self.port)
 				
 				if self.preferred_protocol == 'ipv6':
