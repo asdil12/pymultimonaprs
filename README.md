@@ -87,7 +87,7 @@ If you still want to change it, you can find the symbol table [here](https://git
 
 ### IPv4 / IPv6
 
-To select a protocol you can set `preferred_protocol` to `ipv4`, `ipv6` or `any`. 
+To select a protocol you can set `preferred_protocol` to `ipv4`, `ipv6` or `any`.  
 You use a raw IPv6 address as a gateway like this: `"[2000::1234]:14580"`.
 
 Running
