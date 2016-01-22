@@ -2,6 +2,7 @@
 	"callsign": "DL0ABC-1",
 	"passcode": "12345",
 	"gateway": ["euro.aprs2.net:14580","noam.aprs2.net:14580"],
+	"preferred_protocol": "any",
 	"append_callsign": true,
 	"source": "rtl",
 	"rtl": {

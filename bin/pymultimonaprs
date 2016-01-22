@@ -92,7 +92,9 @@ def bc():
 
 logger.info("Starting pymultimonaprs")
 
-ig = IGate(config['callsign'], config['passcode'], config['gateway'])
+preferred_protocol = config.get("preferred_protocol", "any").lower()
+
+ig = IGate(config['callsign'], config['passcode'], config['gateway'], preferred_protocol)
 mm = Multimon(mmcb,config)
 
 def signal_handler(signal, frame):
