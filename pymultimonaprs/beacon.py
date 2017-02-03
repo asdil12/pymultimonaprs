@@ -93,17 +93,17 @@ def get_weather_frame(callsign, weather):
                 # Rain
                 rain = w.get('rain', {})
                 if 'rainlast1h' in rain:
-                        si = round(rain['rainlast1h'] / 25.4)
+                        si = round((rain['rainlast1h'] / 25.4) * 100)
                         wenc += "r%03d" % si
                 else:
                         wenc += "r..."
                 if 'rainlast24h' in rain:
-                        si = round(rain['rainlast24h'] / 25.4)
+                        si = round((rain['rainlast24h'] / 25.4) * 100)
                         wenc += "p%03d" % si
                 else:
                         wenc += "p..."
                 if 'rainmidnight' in rain:
-                        si = round(rain['rainmidnight'] / 25.4)
+                        si = round((rain['rainmidnight'] / 25.4) * 100)
                         wenc += "P%03d" % si
                 else:
                         wenc += "P..."
