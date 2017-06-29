@@ -33,7 +33,7 @@ def encode_lng(lng):
 def mkframe(callsign, payload):
 	frame = APRSFrame()
 	frame.source = callsign
-	frame.dest = u'APRS'
+	frame.dest = u'APPM13'
 	frame.path = [u'TCPIP*']
 	frame.payload = payload
 	return frame
