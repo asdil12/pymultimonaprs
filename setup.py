@@ -10,6 +10,7 @@ import shutil
 
 class post_install(install):
 	def run(self):
+		prefix = getattr(self, "install_data", "/") or "/"
 		root = getattr(self, "root", "/") or "/"
 		print "Using '%s' as root" % root
 		if root == "/":
@@ -32,6 +33,12 @@ class post_install(install):
 			except pkg_resources.DistributionNotFound:
 				pass
 		install.run(self)
+		if root == "/":
+			# fix prefix in systemd.service file
+			unitfile = os.path.join(root, "/usr/lib/systemd/system", "pymultimonaprs.service")
+			print unitfile
+			new_content = open(unitfile).read().replace("/usr/bin", "%s/bin" % prefix)
+			open(unitfile, "w").write(new_content)
 		# install config file
 		print ""
 		cd = os.path.dirname(os.path.realpath(__file__))
@@ -50,7 +57,7 @@ class post_install(install):
 
 setup(
 	name='pymultimonaprs',
-	version='1.3.0',
+	version='1.3.2',
 	license='GPL',
 	description='RF2APRS-IG Gateway',
 	author='Dominik Heidler',

@@ -12,7 +12,7 @@ import itertools
 from time import sleep
 
 class IGate:
-	def __init__(self, callsign, passcode, gateways):
+	def __init__(self, callsign, passcode, gateways, preferred_protocol):
 		self.log = logging.getLogger('pymultimonaprs')
 		if type(gateways) is list:
 			self.gateways = itertools.cycle(gateways)
@@ -21,6 +21,7 @@ class IGate:
 			self.gateway = gateways #old config, single hostname as a string
 		self.callsign = callsign
 		self.passcode = passcode
+		self.preferred_protocol = preferred_protocol
 		self.socket = None
 		self._sending_queue = Queue.Queue(maxsize=1)
 		self._connect()
@@ -38,13 +39,23 @@ class IGate:
 		while not connected:
 			try:
 				# Connect
-				self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 				gateway = self.gateway or next(self.gateways)
-				self.server, self.port = gateway.split(':')
+				if gateway.startswith("["):
+					self.server, self.port = gateway.lstrip("[").split("]:")
+				else:
+					self.server, self.port = gateway.split(':')
 				self.port = int(self.port)
-				ip = socket.gethostbyname(self.server)
-				self.log.info("connecting... %s:%i" % (ip, self.port))
-				self.socket.connect((ip, self.port))
+				
+				if self.preferred_protocol == 'ipv6':
+					addrinfo = socket.getaddrinfo(self.server, self.port, socket.AF_INET6)
+				elif self.preferred_protocol == 'ipv4':
+					addrinfo = socket.getaddrinfo(self.server, self.port, socket.AF_INET)
+				else:
+					addrinfo = socket.getaddrinfo(self.server, self.port)
+					
+				self.socket = socket.socket(*addrinfo[0][0:3])
+				self.log.info("connecting... %s:%i" % (addrinfo[0][4], self.port))
+				self.socket.connect(addrinfo[0][4])
 				self.log.info("connected")
 
 				server_hello = self.socket.recv(1024)
