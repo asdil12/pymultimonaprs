@@ -18,7 +18,7 @@
 	"beacon": {
 		"lat": 51.00000,
 		"lng": 10.00000,
-		"table": "/",
+		"table": "R",
 		"symbol": "&",
 		"comment": "PyMultimonAPRS iGate",
 		"status": {
