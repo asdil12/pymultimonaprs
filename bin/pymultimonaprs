@@ -17,6 +17,7 @@ from pymultimonaprs.frame import APRSFrame, InvalidFrame
 parser = argparse.ArgumentParser(description='HF2APRS-IG Gateway.')
 parser.add_argument('-c', dest='config', default='/etc/pymultimonaprs.json', help='Use this config file')
 parser.add_argument('--syslog', action='store_true', help='Log to syslog')
+parser.add_argument('--logfile', dest='logfile', help='Log to file')
 parser.add_argument('-v', '--verbose', action='store_true', help='Log all traffic - including beacon')
 args = parser.parse_args()
 
@@ -29,6 +30,10 @@ if args.syslog:
 	loghandler = logging.handlers.SysLogHandler(address = '/dev/log')
 	formater = logging.Formatter('pymultimonaprs: %(message)s')
 	loghandler.setFormatter(formater)
+elif args.logfile:
+	loghandler = logging.FileHandler(args.logfile)
+	formatter = logging.Formatter('[%(asctime)s] %(levelname)+8s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+	loghandler.setFormatter(formatter)
 else:
 	loghandler = logging.StreamHandler(sys.stdout)
 	formatter = logging.Formatter('[%(asctime)s] %(levelname)+8s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
