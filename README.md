@@ -13,7 +13,8 @@ Installation
 
 - Install multimonNG
 - Install rtl-sdr (for RTL-SDR backend)
-- Run `python2 setup.py install`
+- sudo apt install python3 python3-pkg-resources
+- Run `python3 setup.py install`
 
 Configuration
 -------------
