@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 import sys
 
@@ -21,7 +21,8 @@ if __name__ == '__main__':
 	if len(sys.argv) > 1:
 		callsign = sys.argv[1]
 		code = generate(callsign)
-		print "Key for %s: %i" % (callsign.upper(), code)
+		print("Key for %s: %i" % (callsign.upper(), code))
 	else:
-		print "Tool to generate key for APRS-IS network"
-		print "usage: %s CALLSIGN"
+		print("Tool to generate key for APRS-IS network")
+		print("usage: %s CALLSIGN")
+
