@@ -33,7 +33,7 @@ class post_install(install):
 								os.unlink(egg_info)
 							except:
 								pass
-					imp.reload(pkg_resources)
+					importlib.reload(pkg_resources)
 			except pkg_resources.DistributionNotFound:
 				pass
 		install.run(self)
