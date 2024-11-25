@@ -100,7 +100,7 @@ class IGate:
                     # max. 1 Sekunde auf neue Daten warten
                     frame = self._sending_queue.get(True, 1)
                     self.log.debug("sending: %s", frame.export(False))
-                    raw_frame = f"{frame.export()}\r\n"
+                    raw_frame = f"{frame.export(False)}\r\n"
                     totalsent = 0
                     while totalsent < len(raw_frame):
                         sent = self.socket.send(raw_frame[totalsent:].encode('utf-8'))  # encode in UTF-8
